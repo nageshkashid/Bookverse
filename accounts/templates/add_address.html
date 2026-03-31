@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Add Address{% endblock %}
+
+{% block content %}
+
+<h2>Add New Address</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <input class="form-control mb-2" name="full_name" placeholder="Full Name">
+    <input class="form-control mb-2" name="phone" placeholder="Phone">
+    <input class="form-control mb-2" name="address_line_1" placeholder="Address Line 1">
+    <input class="form-control mb-2" name="address_line_2" placeholder="Address Line 2">
+    <input class="form-control mb-2" name="city" placeholder="City">
+    <input class="form-control mb-2" name="state" placeholder="State">
+    <input class="form-control mb-2" name="pincode" placeholder="Pincode">
+
+    <button class="btn btn-primary">Save Address</button>
+</form>
+
+<hr>
+
+<h3>Your Saved Addresses</h3>
+
+{% for a in addresses %}
+<div class="border p-3 rounded mb-3">
+    <p><strong>{{ a.full_name }}</strong></p>
+    <p>{{ a.address_line_1 }}, {{ a.address_line_2 }}</p>
+    <p>{{ a.city }}, {{ a.state }} - {{ a.pincode }}</p>
+    <p>📞 {{ a.phone }}</p>
+
+    <a href="{% url 'accounts:edit_address' a.id %}" class="btn btn-sm btn-warning">Edit</a>
+    <a href="{% url 'accounts:delete_address' a.id %}" class="btn btn-sm btn-danger">Delete</a>
+    <a href="{% url 'orders:checkout_with_address' a.id %}" class="btn btn-sm btn-success">Deliver Here</a>
+</div>
+{% empty %}
+<p>No saved addresses.</p>
+{% endfor %}
+
+{% endblock %}
+
+

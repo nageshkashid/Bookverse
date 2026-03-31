@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Order {{ order.id }}{% endblock %}
+
+{% block content %}
+<h2>Your Order #{{ order.id }}</h2>
+
+<p>Status: <strong>{{ order.status }}</strong></p>
+<p>Total: <strong>₹{{ order.total_amount }}</strong></p>
+<p>Date: {{ order.created_at }}</p>
+
+<hr>
+
+<h4>Delivery Address</h4>
+<div class="border rounded p-3 mb-4">
+    <p><strong>{{ order.address.full_name }}</strong></p>
+    <p>{{ order.address.address_line_1 }}</p>
+    {% if order.address.address_line_2 %}
+        <p>{{ order.address.address_line_2 }}</p>
+    {% endif %}
+    <p>{{ order.address.city }}, {{ order.address.state }} - {{ order.address.pincode }}</p>
+    <p><strong>Phone:</strong> {{ order.address.phone }}</p>
+</div>
+
+<h4>Items</h4>
+
+<div class="list-group">
+    {% for item in order.items.all %}
+    <div class="list-group-item py-3">
+        <div class="row align-items-center">
+
+            <div class="col-md-2 text-center">
+                <img src="{{ item.book.image.url }}" 
+                     alt="{{ item.book.title }}" 
+                     class="img-fluid rounded"
+                     style="height: 100px; object-fit: cover;">
+            </div>
+            
+            <div class="col-md-7">
+                <h5 class="mb-1">{{ item.book.title }}</h5>
+                <p class="mb-1"><strong>Author:</strong> {{ item.book.author }}</p>
+                <p class="mb-1"><strong>ISBN:</strong> {{ item.book.isbn }}</p>
+                <p class="mb-1"><strong>Category:</strong> {{ item.book.get_category_display }}</p>
+                <p class="mb-1"><strong>Quantity:</strong> {{ item.quantity }}</p>
+            </div>
+
+            <div class="col-md-3 text-end">
+                <h5 class="text-success">₹{{ item.price }}</h5>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<a href="{% url 'orders:history' %}" class="btn btn-secondary mt-3">
+    Back to Orders
+</a>
+
+{% endblock %}

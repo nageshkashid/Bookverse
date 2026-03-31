@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Edit Address{% endblock %}
+
+{% block content %}
+<h2>Edit Address</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <input class="form-control mb-2" name="full_name" value="{{ address.full_name }}" placeholder="Full Name">
+    <input class="form-control mb-2" name="phone" value="{{ address.phone }}" placeholder="Phone">
+
+    <input class="form-control mb-2" name="address_line_1" value="{{ address.address_line_1 }}" placeholder="Address Line 1">
+    <input class="form-control mb-2" name="address_line_2" value="{{ address.address_line_2 }}" placeholder="Address Line 2">
+
+    <input class="form-control mb-2" name="city" value="{{ address.city }}" placeholder="City">
+    <input class="form-control mb-2" name="state" value="{{ address.state }}" placeholder="State">
+    <input class="form-control mb-2" name="pincode" value="{{ address.pincode }}" placeholder="Pincode">
+
+    <button class="btn btn-primary mt-2">Update Address</button>
+
+    <a href="{% url 'accounts:add_address' %}" class="btn btn-secondary mt-2">Cancel</a>
+</form>
+{% endblock %}

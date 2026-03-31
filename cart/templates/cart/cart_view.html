@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Your Cart{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">🛒 Your Cart</h2>
+
+{% if cart.items.all %}
+<table class="table table-bordered text-center">
+    <thead>
+        <tr>
+            <th>Book</th>
+            <th>ISBN</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Subtotal</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in cart.items.all %}
+        <tr>
+            <td>{{ item.book.title }}</td>
+            <td>{{ item.book.isbn }}</td>
+            <td>₹{{ item.book.price }}</td>
+
+            <td>
+                <a href="{% url 'cart:decrease' item.book.isbn %}" class="btn btn-sm btn-warning">-</a>
+                <span class="px-2">{{ item.quantity }}</span>
+                <a href="{% url 'cart:increase' item.book.isbn %}" class="btn btn-sm btn-primary">+</a>
+            </td>
+
+            <td>₹{{ item.subtotal }}</td>
+
+            <td>
+                <a href="{% url 'cart:remove' item.book.isbn %}" class="btn btn-danger btn-sm">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Total: ₹{{ cart.total }}</h3>
+
+<div class="mt-4 d-flex gap-3">
+    <a href="{% url 'cart:clear' %}" class="btn btn-danger">Clear Cart</a>
+    <a href="{% url 'accounts:add_address' %}" class="btn btn-success">Proceed to Checkout →</a>
+</div>
+
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+
+{% endblock %}
+
+

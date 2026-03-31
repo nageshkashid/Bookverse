@@ -1,0 +1,212 @@
+{% load static %}
+<style>
+
+.navbar {
+  padding: 12px 0;
+  transition: all 0.3s ease-in-out;
+  z-index: 9999 !important;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.navbar.scrolled {
+  background: #0d0d0d !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.navbar-brand {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: #ffc107 !important;
+}
+
+.nav-link {
+  position: relative;
+  font-size: 1rem;
+  margin-right: 12px;
+  padding-bottom: 6px;
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-link:hover {
+  color: #0d6efd !important;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #0d6efd;
+  transition: 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 55%;
+}
+
+.navbar-nav .nav-link.text-warning {
+  color: #ffc107 !important;
+  font-weight: 600;
+}
+
+.navbar-nav .nav-link.text-danger {
+  color: #ff5252 !important;
+}
+
+.navbar-nav .nav-link.text-info {
+  color: #42baf5 !important;
+}
+
+.navbar-toggler {
+  border: none;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}
+
+.navbar-dark .navbar-toggler-icon {
+  filter: brightness(1.5);
+}
+
+@media (max-width: 991px) {
+
+  .nav-link::after {
+    display: none;
+  }
+
+  .navbar-nav .nav-item {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .navbar-nav .nav-item:last-child {
+    border-bottom: none;
+  }
+
+  .nav-link {
+    font-size: 1.1rem;
+    padding: 10px 0;
+  }
+
+  .navbar-nav {
+    text-align: center;
+  }
+
+  .navbar-brand {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+
+  .nav-link {
+    font-size: 1rem;
+  }
+}
+
+</style>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'core:home' %}">BookVerse</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:home' %}">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'books:book_list' %}">Books</a>
+          </li>
+
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'cart:view' %}">Cart</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'accounts:login' %}" 
+                    onclick="alert('Please login to view your Cart!')">
+                    Cart
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'orders:history' %}">My Orders</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'accounts:login' %}" 
+                    onclick="alert('Please login to view your orders!')">
+                    My Orders
+                  </a>
+                </li>
+                {% endif %}
+
+
+          {% if user.is_authenticated %}
+
+          {% if user.is_staff %}
+              <li class="nav-item">
+                <a class="nav-link text-warning fw-bold" href="{% url 'admin-login' %}">
+                  Admin Panel
+                </a>
+              </li>
+              {% endif %}
+
+          <li class="nav-item">
+            <span class="nav-link text-info">Welcome, {{ user.username }}!</span>
+          </li>
+
+ 
+          <li class="nav-item">
+            <a class="nav-link text-danger" href="{% url 'accounts:logout' %}">Logout</a>
+          </li>
+
+          {% else %}
+
+           <li class="nav-item">
+                <a class="nav-link text-warning fw-bold" href="{% url 'admin-login' %}">
+                  Admin Login
+                </a>
+              </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:signup' %}">Signup</a>
+          </li>
+
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+</nav>

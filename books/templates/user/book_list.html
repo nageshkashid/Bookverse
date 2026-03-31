@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Books{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/books.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h2 class="filter-title">Browse Books</h2>
+
+<form method="GET" class="row g-3 mb-4 p-3 filter-box shadow-sm">
+
+    <div class="col-md-4">
+        <input 
+            type="text" 
+            name="search" 
+            class="form-control"
+            placeholder="Search by title, author, or ISBN..."
+            value="{{ request.GET.search }}">
+    </div>
+
+    <div class="col-md-4">
+        <select class="form-select" name="category">
+            <option value="">All Categories</option>
+            {% for key, value in categories %}
+                <option value="{{ key }}" {% if request.GET.category == key %}selected{% endif %}>
+                    {{ value }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-4 d-flex gap-2">
+        <button class="btn btn-primary w-50 filter-btn">Filter</button>
+        <a href="{% url 'books:book_list' %}" class="btn btn-secondary w-50 filter-btn">Reset</a>
+    </div>
+
+</form>
+
+<div class="row g-4">
+    {% for book in books %}
+    <div class="col-md-3">
+
+        <div class="card book-card h-100">
+            <img src="{{ book.image.url }}" class="card-img-top">
+
+            <div class="card-body">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <p class="text-muted m-0">{{ book.author }}</p>
+                <p class="fw-bold">₹{{ book.price }}</p>
+
+                <a href="{% url 'books:book_detail' book.isbn %}" class="btn btn-primary w-100 mt-2">
+                    View Details
+                </a>
+            </div>
+        </div>
+
+    </div>
+    {% empty %}
+        <p class="text-center mt-4">No books found.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
